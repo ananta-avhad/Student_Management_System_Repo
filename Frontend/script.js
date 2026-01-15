@@ -1,3 +1,24 @@
+//For displaying records
+
+function loadStudents() {
+    fetch("http://localhost:3000/students")
+        .then(res => res.json())
+        .then(data => {
+            const table = document.getElementById("studentTable");
+            table.innerHTML = "";
+
+            data.forEach(student => {
+                const row = table.insertRow();
+                row.insertCell(0).innerText = student.name;
+                row.insertCell(1).innerText = student.email;
+                row.insertCell(2).innerText = student.course;
+                row.insertCell(3).innerText = student.marks;
+            });
+        });
+}
+
+
+
 function addStudent() {
     const name = document.getElementById("name").value;
     const email = document.getElementById("email").value;
@@ -18,10 +39,13 @@ function addStudent() {
         })
         .then(response => response.text())
         .then(data => {
-            console.log("Server says:", data);
             alert("Student Added Successfully");
+            loadStudents(); // refresh table
         })
-        .catch(error => {
-            console.log("Error:", error);
-        });
+
+    .catch(error => {
+        console.log("Error:", error);
+    });
 }
+
+window.onload = loadStudents; //after reloading window

@@ -34,4 +34,24 @@ app.post("/add-student", (req, res) => {
     });
 });
 
-app.listen(3000, () => console.log("Server running on 3000"));
+//Here disply rescords is added
+
+app.get("/students", (req, res) => {
+    const sql = "SELECT * FROM students";
+
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+            res.json([]);
+        } else {
+            res.json(result);
+        }
+    });
+});
+
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log("Server running on port", PORT);
+});
