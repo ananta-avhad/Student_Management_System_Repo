@@ -6,12 +6,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+//changed because we are deploying - for security
+
 const db = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "7448",
-    database: "student_db"
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME
 });
+
 
 db.connect(err => {
     if (err) console.log("DB Error:", err);
@@ -49,6 +52,8 @@ app.get("/students", (req, res) => {
     });
 });
 
+
+// changed this lines for deplyment 
 
 const PORT = process.env.PORT || 3000;
 
