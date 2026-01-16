@@ -10,6 +10,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const path = require("path");
+app.use(express.static(path.join(__dirname, "../")));
+
+
 // Debug logs
 console.log("DB_HOST:", process.env.DB_HOST);
 console.log("DB_USER:", process.env.DB_USER);
@@ -69,4 +73,8 @@ const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
     console.log("Server running on port", PORT);
+});
+
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "../index.html"));
 });
