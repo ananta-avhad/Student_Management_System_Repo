@@ -10,11 +10,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Debug logs
 console.log("DB_HOST:", process.env.DB_HOST);
 console.log("DB_USER:", process.env.DB_USER);
 console.log("DB_NAME:", process.env.DB_NAME);
 console.log("DB_PORT:", process.env.DB_PORT);
 
+// MySQL Pool Connection (CORRECT METHOD)
 const db = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -27,19 +29,15 @@ const db = mysql.createPool({
     queueLimit: 0
 });
 
+// IMPORTANT: NO db.connect() when using createPool()
 
-db.connect(err => {
-    if (err) {
-        console.log("DB Connection Error:", err);
-    } else {
-        console.log("MySQL Connected Successfully");
-    }
-});
+// ROUTES 
 
+// Add Student
 app.post("/add-student", (req, res) => {
     const { name, email, course, marks } = req.body;
 
-    const sql = "INSERT INTO students (name,email,course,marks) VALUES (?,?,?,?)";
+    const sql = "INSERT INTO students (name, email, course, marks) VALUES (?, ?, ?, ?)";
 
     db.query(sql, [name, email, course, marks], (err) => {
         if (err) {
@@ -51,6 +49,7 @@ app.post("/add-student", (req, res) => {
     });
 });
 
+// Get All Students
 app.get("/students", (req, res) => {
     const sql = "SELECT * FROM students";
 
@@ -63,6 +62,8 @@ app.get("/students", (req, res) => {
         }
     });
 });
+
+// SERVER START 
 
 const PORT = process.env.PORT || 3000;
 
