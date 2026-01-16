@@ -1,7 +1,7 @@
 //For displaying records
 
 function loadStudents() {
-    fetch("http://localhost:3000/students")
+    fetch("https://student-management-system-ananta-avhad.onrender.com/students")
         .then(res => res.json())
         .then(data => {
             const table = document.getElementById("studentTable");
@@ -25,7 +25,7 @@ function addStudent() {
     const course = document.getElementById("course").value;
     const marks = document.getElementById("marks").value;
 
-    fetch("http://localhost:3000/add-student", {
+    fetch("https://student-management-system-ananta-avhad.onrender.com/students", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

@@ -1,4 +1,6 @@
-require('dotenv').config();
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
 
 const express = require("express");
 const mysql = require("mysql2");
@@ -8,14 +10,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// -------- DEBUG LOGS --------
 console.log("DB_HOST:", process.env.DB_HOST);
 console.log("DB_USER:", process.env.DB_USER);
 console.log("DB_NAME:", process.env.DB_NAME);
 console.log("DB_PORT:", process.env.DB_PORT);
-// ---------------------------
 
-// MySQL Connection with SSL for Aiven
 const db = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -35,12 +34,7 @@ db.connect(err => {
     }
 });
 
-// -------- ROUTES --------
-
-// Add Student
 app.post("/add-student", (req, res) => {
-    console.log("Received:", req.body);
-
     const { name, email, course, marks } = req.body;
 
     const sql = "INSERT INTO students (name,email,course,marks) VALUES (?,?,?,?)";
@@ -55,7 +49,6 @@ app.post("/add-student", (req, res) => {
     });
 });
 
-// Get All Students
 app.get("/students", (req, res) => {
     const sql = "SELECT * FROM students";
 
@@ -68,8 +61,6 @@ app.get("/students", (req, res) => {
         }
     });
 });
-
-// -------- SERVER START --------
 
 const PORT = process.env.PORT || 3000;
 
