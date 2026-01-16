@@ -25,7 +25,7 @@ function addStudent() {
     const course = document.getElementById("course").value;
     const marks = document.getElementById("marks").value;
 
-    fetch("https://student-management-system-ananta-avhad.onrender.com/students", {
+    fetch("https://student-management-system-ananta-avhad.onrender.com/add-student", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
