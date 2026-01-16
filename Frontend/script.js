@@ -1,7 +1,7 @@
-//For displaying records
+// For displaying records
 
 function loadStudents() {
-    fetch("https://student-management-system-ananta-avhad.onrender.com/students")
+    fetch("/students")
         .then(res => res.json())
         .then(data => {
             const table = document.getElementById("studentTable");
@@ -14,10 +14,11 @@ function loadStudents() {
                 row.insertCell(2).innerText = student.course;
                 row.insertCell(3).innerText = student.marks;
             });
+        })
+        .catch(error => {
+            console.log("Error loading students:", error);
         });
 }
-
-
 
 function addStudent() {
     const name = document.getElementById("name").value;
@@ -25,7 +26,7 @@ function addStudent() {
     const course = document.getElementById("course").value;
     const marks = document.getElementById("marks").value;
 
-    fetch("https://student-management-system-ananta-avhad.onrender.com/add-student", {
+    fetch("/add-student", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -42,10 +43,9 @@ function addStudent() {
             alert("Student Added Successfully");
             loadStudents(); // refresh table
         })
-
-    .catch(error => {
-        console.log("Error:", error);
-    });
+        .catch(error => {
+            console.log("Error:", error);
+        });
 }
 
-window.onload = loadStudents; //after reloading window
+window.onload = loadStudents;
