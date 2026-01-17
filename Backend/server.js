@@ -56,7 +56,7 @@ app.post("/add-student", (req, res) => {
 });
 
 // Get All Students
-app.get("/students", (req, res) => {
+app.get("/*", (req, res) => {
     const sql = "SELECT * FROM students";
 
     db.query(sql, (err, result) => {
