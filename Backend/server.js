@@ -11,7 +11,8 @@ app.use(cors());
 app.use(express.json());
 
 const path = require("path");
-app.use(express.static(path.join(__dirname, "..")));
+app.use(express.static(path.join(__dirname, "../Frontend")));
+
 
 
 
@@ -72,9 +73,10 @@ app.get("/students", (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "../index.html"));
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../Frontend/index.html"));
 });
+
 
 app.listen(PORT, () => {
     console.log("Server running on port", PORT);
