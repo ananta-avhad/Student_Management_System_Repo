@@ -10,6 +10,10 @@ const db = mysql.createPool({
 });
 
 module.exports = async(req, res) => {
+
+    console.log("DEBUG HOST: ", `"${process.env.DB_HOST}"`);
+    console.log("DEBUG USER: ", `"${process.env.DB_USER}"`);
+    console.log("DEBUG PORT: ", `"${process.env.DB_PORT}"`);
     // 1. Handle CORS
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
