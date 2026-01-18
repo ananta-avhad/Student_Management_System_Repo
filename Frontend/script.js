@@ -1,65 +1,62 @@
-if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').config();
+const API_URL = ""; // Empty string means use relative path on Vercel
+
+// Function to fetch and display students
+async function fetchStudents() {
+    try {
+        const response = await fetch(`${API_URL}/students`);
+        const students = await response.json();
+
+        const tableBody = document.getElementById("studentTable");
+        tableBody.innerHTML = ""; // Clear existing rows
+
+        students.forEach(student => {
+            const row = `<tr>
+                <td>${student.name}</td>
+                <td>${student.email}</td>
+                <td>${student.course}</td>
+                <td>${student.marks}</td>
+            </tr>`;
+            tableBody.innerHTML += row;
+        });
+    } catch (error) {
+        console.error("Error loading students:", error);
+    }
 }
 
-const express = require("express");
-const mysql = require("mysql2");
-const cors = require("cors");
-const path = require("path");
+// Function to add a student
+async function addStudent() {
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const course = document.getElementById("course").value;
+    const marks = document.getElementById("marks").value;
 
-const app = express();
+    if (!name || !email) {
+        alert("Please fill in Name and Email");
+        return;
+    }
 
-app.use(cors());
-app.use(express.json());
+    try {
+        const response = await fetch(`${API_URL}/add-student`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, email, course, marks })
+        });
 
-// Serve frontend correctly
-app.use(express.static(path.join(__dirname, "..")));
-
-// Debug logs
-console.log("DB_HOST:", process.env.DB_HOST);
-console.log("DB_USER:", process.env.DB_USER);
-console.log("DB_NAME:", process.env.DB_PORT);
-
-// Database pool
-const db = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    port: process.env.DB_PORT,
-    ssl: { rejectUnauthorized: false }
-});
-
-// Routes
-app.post("/add-student", (req, res) => {
-    const { name, email, course, marks } = req.body;
-
-    const sql = "INSERT INTO students (name,email,course,marks) VALUES (?,?,?,?)";
-
-    db.query(sql, [name, email, course, marks], (err) => {
-        if (err) {
-            console.log(err);
-            res.status(500).send("Error");
+        if (response.ok) {
+            alert("Student Added Successfully!");
+            fetchStudents(); // Refresh the table
+            // Clear inputs
+            document.getElementById("name").value = "";
+            document.getElementById("email").value = "";
+            document.getElementById("course").value = "";
+            document.getElementById("marks").value = "";
         } else {
-            res.send("Student Added");
+            alert("Failed to add student");
         }
-    });
-});
+    } catch (error) {
+        console.error("Error adding student:", error);
+    }
+}
 
-app.get("/students", (req, res) => {
-    db.query("SELECT * FROM students", (err, result) => {
-        if (err) res.json([]);
-        else res.json(result);
-    });
-});
-
-// VERY IMPORTANT - catch all route
-app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../index.html"));
-});
-
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-    console.log("Server running on port", PORT);
-});
+// Load students when page loads
+window.onload = fetchStudents;
