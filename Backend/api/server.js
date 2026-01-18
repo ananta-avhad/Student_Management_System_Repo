@@ -1,11 +1,11 @@
 const mysql = require("mysql2");
 
 const db = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    port: process.env.DB_PORT,
+    host: "mysql-26cb99f4-anantaavhad23-6d0c.l.aivencloud.com", // Copied exactly from your image
+    user: "avnadmin",
+    password: process.env.DB_PASSWORD, // Keep password safe for now
+    database: "defaultdb",
+    port: 28497, // Hardcoded port
     ssl: { rejectUnauthorized: false }
 });
 
