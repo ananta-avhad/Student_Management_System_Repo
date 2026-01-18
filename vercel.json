@@ -1,0 +1,25 @@
+{
+    "version": 2,
+    "builds": [{
+            "src": "Backend/api/server.js",
+            "use": "@vercel/node"
+        },
+        {
+            "src": "Frontend/*",
+            "use": "@vercel/static"
+        }
+    ],
+    "routes": [{
+            "src": "/students",
+            "dest": "Backend/api/server.js"
+        },
+        {
+            "src": "/add-student",
+            "dest": "Backend/api/server.js"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "Frontend/$1"
+        }
+    ]
+}
